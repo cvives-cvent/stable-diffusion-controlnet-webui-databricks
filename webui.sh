@@ -224,15 +224,13 @@ fi
 
 
 # Dowwnload models if MODELS_TO_DOWNLOAD is set  
-if [[ -n "${MODELS_TO_DOWNLOAD}" ]]; then  
-    if [[ -f "${MODELS_TO_DOWNLOAD}" ]]; then  
-        download_models_from_file "${MODELS_TO_DOWNLOAD}"  
-    else  
-        printf "\n%s\n" "${delimiter}"
-        printf "The file '${MODELS_TO_DOWNLOAD}' does not exist. Skipping model download."  
-        printf "\n%s\n" "${delimiter}"
-    fi  
-fi  
+if [[ -f "${MODELS_TO_DOWNLOAD}" ]]; then  
+     download_models_from_file "${MODELS_TO_DOWNLOAD}"  
+else  
+    printf "\n%s\n" "${delimiter}"
+    printf "The file '${MODELS_TO_DOWNLOAD}' does not exist. Skipping model download."  
+    printf "\n%s\n" "${delimiter}"
+fi    
 prepare_tcmalloc() {
     if [[ "${OSTYPE}" == "linux"* ]] && [[ -z "${NO_TCMALLOC}" ]] && [[ -z "${LD_PRELOAD}" ]]; then
         TCMALLOC="$(PATH=/usr/sbin:$PATH ldconfig -p | grep -Po "libtcmalloc(_minimal|)\.so\.\d" | head -n 1)"
