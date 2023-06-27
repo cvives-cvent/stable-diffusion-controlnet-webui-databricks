@@ -196,6 +196,13 @@ else
     "${GIT}" checkout preconfig || { printf "\e[1m\e[31mERROR: Can't checkout to feature branch, aborting...\e[0m"; exit 1; }
 fi
 
+# Read variables from webui-user.sh
+# we repeat this after installation as there are some variables that read from repo files
+# shellcheck source=/dev/null
+if [[ -f webui-user.sh ]]
+then
+    source ./webui-user.sh
+fi
 if [[ -z "${VIRTUAL_ENV}" ]];
 then
     printf "\n%s\n" "${delimiter}"
@@ -244,7 +251,6 @@ prepare_tcmalloc() {
     fi
 }
 
-#Try getting huggingface models
 
 KEEP_GOING=1
 export SD_WEBUI_RESTART=tmp/restart
