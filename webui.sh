@@ -29,7 +29,7 @@ fi
 # Name of the subdirectory (defaults to stable-diffusion-webui)
 if [[ -z "${clone_dir}" ]]
 then
-    clone_dir="stable-diffusion-webui"
+    clone_dir="stable-diffusion-controlnet-webui-databricks"
 fi
 
 # python3 executable
@@ -56,7 +56,8 @@ then
 fi
 
 # this script cannot be run as root by default
-can_run_as_root=0
+# EDIT - We hardcode this as 1 as executing script in ephemeral cluster tends to default as root
+can_run_as_root=1
 
 # read any command line flags to the webui.sh script
 while getopts "f" flag > /dev/null 2>&1
@@ -81,6 +82,22 @@ printf "\e[1m\e[32mInstall script for stable-diffusion + Web UI\n"
 printf "\e[1m\e[34mTested on Debian 11 (Bullseye)\e[0m"
 printf "\n%s\n" "${delimiter}"
 
+# Function to automatically install models
+download_models_from_file() {  
+    local models_file="$1"  
+    local dest_dir="${install_dir}/${clone_dir}/extensions/sd-webui-controlnet/models"  
+  
+    while IFS= read -r file_url; do  
+        local file_name="$(basename "${file_url}")"  
+  
+        if [ ! -f "${dest_dir}/${file_name}" ]; then  
+            printf "\n%s\n" "${delimiter}"
+            printf "download ${file_name}"  
+            printf "\n%s\n" "${delimiter}"
+            wget -P "${dest_dir}/" "${file_url}"  
+        fi  
+    done < "${models_file}"  
+}  
 # Do not run as root
 if [[ $(id -u) -eq 0 && can_run_as_root -eq 0 ]]
 then
@@ -205,7 +222,17 @@ else
     printf "\n%s\n" "${delimiter}"
 fi
 
-# Try using TCMalloc on Linux
+
+# Dowwnload models if MODELS_TO_DOWNLOAD is set  
+if [[ -n "${MODELS_TO_DOWNLOAD}" ]]; then  
+    if [[ -f "${MODELS_TO_DOWNLOAD}" ]]; then  
+        download_models_from_file "${MODELS_TO_DOWNLOAD}"  
+    else  
+        printf "\n%s\n" "${delimiter}"
+        printf "The file '${MODELS_TO_DOWNLOAD}' does not exist. Skipping model download."  
+        printf "\n%s\n" "${delimiter}"
+    fi  
+fi  
 prepare_tcmalloc() {
     if [[ "${OSTYPE}" == "linux"* ]] && [[ -z "${NO_TCMALLOC}" ]] && [[ -z "${LD_PRELOAD}" ]]; then
         TCMALLOC="$(PATH=/usr/sbin:$PATH ldconfig -p | grep -Po "libtcmalloc(_minimal|)\.so\.\d" | head -n 1)"
@@ -217,6 +244,8 @@ prepare_tcmalloc() {
         fi
     fi
 }
+
+#Try getting huggingface models
 
 KEEP_GOING=1
 export SD_WEBUI_RESTART=tmp/restart

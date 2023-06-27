@@ -34,6 +34,8 @@
 #export K_DIFFUSION_PACKAGE=""
 #export GFPGAN_PACKAGE=""
 
+#uncomment to download controlnet models during startup
+export MODELS_TO_DOWNLOAD="models_to_download.txt"
 # Fixed git commits
 #export STABLE_DIFFUSION_COMMIT_HASH=""
 #export CODEFORMER_COMMIT_HASH=""
