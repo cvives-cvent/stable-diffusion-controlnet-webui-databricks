@@ -31,5 +31,5 @@ torchdiffeq
 torchsde
 transformers==4.25.1
 
-protobuf
-insightface
+protobuf==3.20
+insightface==0.7.3
