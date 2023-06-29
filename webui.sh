@@ -196,6 +196,8 @@ else
     "${GIT}" checkout preconfig || { printf "\e[1m\e[31mERROR: Can't checkout to feature branch, aborting...\e[0m"; exit 1; }
     "${GIT}" submodule init  || { printf "\e[1m\e[31mERROR: Can't git submodule init, aborting...\e[0m"; exit 1; }
     "${GIT}" submodule update || { printf "\e[1m\e[31mERROR: Can't git submodule update, aborting...\e[0m"; exit 1; }
+    "${GIT}" submodule foreach git checkout main
+    "${GIT}" submodule foreach git pull origin main
 fi
 
 # Read variables from webui-user.sh
