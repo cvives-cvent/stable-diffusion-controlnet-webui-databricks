@@ -207,7 +207,9 @@ if [[ -f webui-user.sh ]]
 then
     source ./webui-user.sh
 fi
-if [[ -z "${VIRTUAL_ENV}" ]];
+
+# Activate or create python evironment. Will always create if NO_DEFAULT_VENV exists
+if [[ -z "${VIRTUAL_ENV}"  || ! -z "${NO_DEFAULT_VENV}" ]];
 then
     printf "\n%s\n" "${delimiter}"
     printf "Create and activate python venv"

@@ -3,4 +3,4 @@
 	url = https://github.com/Mikubill/sd-webui-controlnet.git
 [submodule "extensions/sd-webui-roop"]
 	path = extensions/sd-webui-roop
-	url = https://github.com/s0md3v/sd-webui-roop
+	url = https://github.com/s0md3v/sd-webui-roop.git

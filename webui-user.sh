@@ -20,7 +20,8 @@
 
 # python3 venv without trailing slash (defaults to ${install_dir}/${clone_dir}/venv)
 #venv_dir="venv"
-
+# Don't use the default venv and create a new one at root dir
+# NO_DEFAULT_VENV="True"
 # script to launch to start the app
 #export LAUNCH_SCRIPT="launch.py"
 
