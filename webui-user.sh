@@ -17,7 +17,8 @@
 
 # git executable
 #export GIT="git"
-
+#whether to output subprocess output to shell
+export WEBUI_LAUNCH_LIVE_OUTPUT="1"
 # python3 venv without trailing slash (defaults to ${install_dir}/${clone_dir}/venv)
 #venv_dir="venv"
 # Don't use the default venv and create a new one at root dir
