@@ -41,6 +41,9 @@ export MODELS_TO_DOWNLOAD="models_to_download.txt"
 
 #uncommnet to download extra stable diffusion models during startup
 export STABLE_DIFFUSION_MODELS_TO_DOWNLOAD="stable_diffusion_models_to_download.txt"
+
+#uncomment to download extra lora models during startup
+export LORA_MODELS_TO_DOWNLOAD="lora_models_to_download.txt"
 # Fixed git commits
 #export STABLE_DIFFUSION_COMMIT_HASH=""
 #export CODEFORMER_COMMIT_HASH=""

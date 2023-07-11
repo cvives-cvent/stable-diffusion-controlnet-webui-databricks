@@ -243,13 +243,23 @@ else
     printf "\n%s\n" "${delimiter}"
     printf "The file '${MODELS_TO_DOWNLOAD}' does not exist. Skipping model download."  
     printf "\n%s\n" "${delimiter}"
-fi    
+fi  
+  
 # Dowwnload models if STABLE_DIFFUSION_MODELS_TO_DOWNLOAD is set  
 if [[ -f "${STABLE_DIFFUSION_MODELS_TO_DOWNLOAD}" ]]; then  
      download_models_from_file "${STABLE_DIFFUSION_MODELS_TO_DOWNLOAD}"  "${install_dir}/${clone_dir}/models/Stable-diffusion"
 else  
     printf "\n%s\n" "${delimiter}"
     printf "The file '${STABLE_DIFFUSION_MODELS_TO_DOWNLOAD}' does not exist. Skipping model download."  
+    printf "\n%s\n" "${delimiter}"
+fi
+    
+# Download models if LORA_MODELS_TO_DOWNLOAD is set  
+if [[ -f "${LORA_MODELS_TO_DOWNLOAD}" ]]; then  
+     download_models_from_file "${LORA_MODELS_TO_DOWNLOAD}"  "${install_dir}/${clone_dir}/models/Lora"
+else  
+    printf "\n%s\n" "${delimiter}"
+    printf "The file '${LORA_MODELS_TO_DOWNLOAD}' does not exist. Skipping model download."  
     printf "\n%s\n" "${delimiter}"
 fi    
 prepare_tcmalloc() {
