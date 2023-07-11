@@ -18,7 +18,7 @@
 # git executable
 #export GIT="git"
 #whether to output subprocess output to shell
-export WEBUI_LAUNCH_LIVE_OUTPUT="1"
+#export WEBUI_LAUNCH_LIVE_OUTPUT="1"
 # python3 venv without trailing slash (defaults to ${install_dir}/${clone_dir}/venv)
 #venv_dir="venv"
 # Don't use the default venv and create a new one at root dir
@@ -38,6 +38,9 @@ export WEBUI_LAUNCH_LIVE_OUTPUT="1"
 
 #uncomment to download controlnet models during startup
 export MODELS_TO_DOWNLOAD="models_to_download.txt"
+
+#uncommnet to download extra stable diffusion models during startup
+export STABLE_DIFFUSION_MODELS_TO_DOWNLOAD="stable_diffusion_models_to_download.txt"
 # Fixed git commits
 #export STABLE_DIFFUSION_COMMIT_HASH=""
 #export CODEFORMER_COMMIT_HASH=""

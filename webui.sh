@@ -85,8 +85,7 @@ printf "\n%s\n" "${delimiter}"
 # Function to automatically install models
 download_models_from_file() {  
     local models_file="$1"  
-    local dest_dir="${install_dir}/${clone_dir}/extensions/sd-webui-controlnet/models"  
-  
+    local dest_dir="$2" 
     while IFS= read -r file_url; do  
         local file_name="$(basename "${file_url}")"  
   
@@ -94,7 +93,7 @@ download_models_from_file() {
             printf "\n%s\n" "${delimiter}"
             printf "download ${file_name}"  
             printf "\n%s\n" "${delimiter}"
-            wget -P "${dest_dir}/" "${file_url}"  
+            wget -P "${dest_dir}/" "${file_url}" --content-disposition 
         fi  
     done < "${models_file}"  
 }  
@@ -239,10 +238,18 @@ fi
 
 # Dowwnload models if MODELS_TO_DOWNLOAD is set  
 if [[ -f "${MODELS_TO_DOWNLOAD}" ]]; then  
-     download_models_from_file "${MODELS_TO_DOWNLOAD}"  
+     download_models_from_file "${MODELS_TO_DOWNLOAD}"  "${install_dir}/${clone_dir}/extensions/sd-webui-controlnet/models"
 else  
     printf "\n%s\n" "${delimiter}"
     printf "The file '${MODELS_TO_DOWNLOAD}' does not exist. Skipping model download."  
+    printf "\n%s\n" "${delimiter}"
+fi    
+# Dowwnload models if STABLE_DIFFUSION_MODELS_TO_DOWNLOAD is set  
+if [[ -f "${STABLE_DIFFUSION_MODELS_TO_DOWNLOAD}" ]]; then  
+     download_models_from_file "${STABLE_DIFFUSION_MODELS_TO_DOWNLOAD}"  "${install_dir}/${clone_dir}/models/Stable-diffusion"
+else  
+    printf "\n%s\n" "${delimiter}"
+    printf "The file '${STABLE_DIFFUSION_MODELS_TO_DOWNLOAD}' does not exist. Skipping model download."  
     printf "\n%s\n" "${delimiter}"
 fi    
 prepare_tcmalloc() {

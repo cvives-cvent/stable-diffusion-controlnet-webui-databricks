@@ -1,0 +1,4 @@
+https://huggingface.co/stabilityai/stable-diffusion-2-1/resolve/main/v2-1_768-ema-pruned.safetensors
+https://huggingface.co/vives/coloringbook-safetensors/resolve/main/coloringBook_coloringBook.safetensors
+https://huggingface.co/vives/coloringbook-safetensors/resolve/main/coloringBook_coloringBook.yaml
+https://civitai.com/api/download/models/109123
