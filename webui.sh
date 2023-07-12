@@ -208,6 +208,8 @@ else
     "${GIT}" clone https://github.com/cvives-cvent/stable-diffusion-controlnet-webui-databricks.git "${clone_dir}"
     cd "${clone_dir}"/ || { printf "\e[1m\e[31mERROR: Can't cd to %s/%s/, aborting...\e[0m" "${install_dir}" "${clone_dir}"; exit 1; }
     "${GIT}" checkout preconfig || { printf "\e[1m\e[31mERROR: Can't checkout to feature branch, aborting...\e[0m"; exit 1; }
+    "${GIT}" submodule update --init --recursive  || { printf "\e[1m\e[31mERROR: Can't git submodule init, aborting...\e[0m"; exit 1; }
+    "${GIT}" submodule update --recursive || { printf "\e[1m\e[31mERROR: Can't git submodule update, aborting...\e[0m"; exit 1; }
     checkout_to_main_for_submodule
 fi
 
@@ -273,7 +275,17 @@ else
     printf "\n%s\n" "${delimiter}"
     printf "The file '${LORA_MODELS_TO_DOWNLOAD}' does not exist. Skipping model download."  
     printf "\n%s\n" "${delimiter}"
+fi
+    
+# Download embeddings if EMBEDDINGS_TO_DOWNLOAD is set  
+if [[ -f "${EMBEDDINGS_TO_DOWNLOAD}" ]]; then  
+     download_models_from_file "${EMBEDDINGS_TO_DOWNLOAD}"  "${install_dir}/${clone_dir}/embeddings"
+else  
+    printf "\n%s\n" "${delimiter}"
+    printf "The file '${EMBEDDINGS_TO_DOWNLOAD}' does not exist. Skipping model download."  
+    printf "\n%s\n" "${delimiter}"
 fi    
+
 prepare_tcmalloc() {
     if [[ "${OSTYPE}" == "linux"* ]] && [[ -z "${NO_TCMALLOC}" ]] && [[ -z "${LD_PRELOAD}" ]]; then
         TCMALLOC="$(PATH=/usr/sbin:$PATH ldconfig -p | grep -Po "libtcmalloc(_minimal|)\.so\.\d" | head -n 1)"
