@@ -96,6 +96,21 @@ download_models_from_file() {
             wget -P "${dest_dir}/" "${file_url}" --content-disposition 
         fi  
     done < "${models_file}"  
+}
+
+# Function to go into submodule and checkout to master/main branch
+checkout_to_main_for_submodule(){
+  local current_dir=$(pwd)  
+  local submodule_paths=$(git submodule foreach --quiet 'echo $path')  
+  
+  for submodule_path in $submodule_paths; do  
+    cd "$current_dir/$submodule_path" || return  
+    echo "Checking out to main in : $submodule_path"  
+    "${GIT}" checkout $("${GIT}" remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
+    "${GIT}" pull origin $("${GIT}" remote show origin | grep 'HEAD branch' | cut -d' ' -f5)  
+  done  
+  
+  cd "$current_dir" || return  
 }  
 # Do not run as root
 if [[ $(id -u) -eq 0 && can_run_as_root -eq 0 ]]
@@ -193,10 +208,7 @@ else
     "${GIT}" clone https://github.com/cvives-cvent/stable-diffusion-controlnet-webui-databricks.git "${clone_dir}"
     cd "${clone_dir}"/ || { printf "\e[1m\e[31mERROR: Can't cd to %s/%s/, aborting...\e[0m" "${install_dir}" "${clone_dir}"; exit 1; }
     "${GIT}" checkout preconfig || { printf "\e[1m\e[31mERROR: Can't checkout to feature branch, aborting...\e[0m"; exit 1; }
-    "${GIT}" submodule update --init --recursive  || { printf "\e[1m\e[31mERROR: Can't git submodule init, aborting...\e[0m"; exit 1; }
-    "${GIT}" submodule update --recursive || { printf "\e[1m\e[31mERROR: Can't git submodule update, aborting...\e[0m"; exit 1; }
-    "${GIT}" submodule foreach git checkout $(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
-    "${GIT}" submodule foreach git pull origin $(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
+    checkout_to_main_for_submodule
 fi
 
 # Read variables from webui-user.sh
