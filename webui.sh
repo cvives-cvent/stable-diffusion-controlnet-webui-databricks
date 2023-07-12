@@ -193,10 +193,10 @@ else
     "${GIT}" clone https://github.com/cvives-cvent/stable-diffusion-controlnet-webui-databricks.git "${clone_dir}"
     cd "${clone_dir}"/ || { printf "\e[1m\e[31mERROR: Can't cd to %s/%s/, aborting...\e[0m" "${install_dir}" "${clone_dir}"; exit 1; }
     "${GIT}" checkout preconfig || { printf "\e[1m\e[31mERROR: Can't checkout to feature branch, aborting...\e[0m"; exit 1; }
-    "${GIT}" submodule init  || { printf "\e[1m\e[31mERROR: Can't git submodule init, aborting...\e[0m"; exit 1; }
-    "${GIT}" submodule update || { printf "\e[1m\e[31mERROR: Can't git submodule update, aborting...\e[0m"; exit 1; }
-    "${GIT}" submodule foreach git checkout main
-    "${GIT}" submodule foreach git pull origin main
+    "${GIT}" submodule update --init --recursive  || { printf "\e[1m\e[31mERROR: Can't git submodule init, aborting...\e[0m"; exit 1; }
+    "${GIT}" submodule update --recursive || { printf "\e[1m\e[31mERROR: Can't git submodule update, aborting...\e[0m"; exit 1; }
+    "${GIT}" submodule foreach git checkout $(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
+    "${GIT}" submodule foreach git pull origin $(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
 fi
 
 # Read variables from webui-user.sh
